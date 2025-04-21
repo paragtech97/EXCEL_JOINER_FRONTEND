@@ -13,16 +13,22 @@ export default function App() {
   };
 
   const handleSubmit = async () => {
-    if (!file1 || !file2) return alert("Please select both files.");
+    if (!file1 || !file2) {
+      alert("Please select both files.");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("file1", file1);
     formData.append("file2", file2);
+
+    console.log("Submitting files:", file1.name, file2.name); // 👈 Debug log
 
     setLoading(true);
     setSuccess(false);
 
     try {
-      const response = await fetch("https://excel-joiner-backend.onrender.com", {
+      const response = await fetch("https://excel-joiner-backend.onrender.com/join", {
         method: "POST",
         body: formData,
       });
@@ -38,11 +44,13 @@ export default function App() {
         link.remove();
         setSuccess(true);
       } else {
-        alert("Failed to process files.");
+        const errorText = await response.text();
+        console.error("Join failed:", errorText);
+        alert("❌ Failed to process files. Please check the input format.");
       }
     } catch (err) {
-      console.error(err);
-      alert("Error occurred during file processing.");
+      console.error("Error during file upload:", err);
+      alert("⚠️ Error occurred during file processing.");
     }
 
     setLoading(false);
