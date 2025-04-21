@@ -22,7 +22,7 @@ export default function App() {
     setSuccess(false);
 
     try {
-      const response = await fetch("http://localhost:8000/join", {
+      const response = await fetch("https://excel-joiner-backend.onrender.com", {
         method: "POST",
         body: formData,
       });
